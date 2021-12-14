@@ -1,61 +1,70 @@
-import React, { useState } from "react";
+import React, { Component } from 'react';
 
-import { fetchWeather } from "./api/fetchWeather";
-import "./App.css";
+import './App.css';
+import { createCreds, validateCreds } from './webauthn';
 
-const App = () => {
-    const [query, setQuery] = useState("");
-    const [weather, setWeather] = useState({});
-
-    const search = async (e) => {
-        if (e.key === "Enter") {
-            const data = await fetchWeather(query);
-
-            setWeather(data);
-            setQuery("");
-            console.log(data);
-        }
-    };
-
+const buttonStyle = {
+  padding: 10,
+  margin: 5
+}
+const hideButton = {
+  padding: 10,
+  margin: 5,
+  // display:'none'
+}
+class App extends Component {
+  constructor(props){
+    super(props);
+    this.state={
+      userName:''
+    }
+  }
+  handleChange = (e)=>{
+    this.setState({
+      [e.target.name]:e.target.value
+    })
+  }
+  render() {
     return (
-        <div className="main-container">
-            <input
-                type="text"
-                className="search"
-                placeholder="Search..."
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                onKeyPress={search}
-            />
-            {weather.main && (
-                <div className="city">
-                    <h2 className="city-name">
-                        <span>{weather.name}</span>
-                        <sup>{weather.sys.country}</sup>
-                    </h2>
-                    <div className="city-temp">
-                        {Math.round(weather.main.temp)}
-                        <sup>&deg;F</sup>
-                    </div>
-                    <div style={{ textAlign: "center" }}>
-                        <h3>Feels like</h3>
-                        <h2>
-                            {Math.round(weather.main.feels_like)}
-                            <sup>&deg;F</sup>
-                        </h2>
-                    </div>
-                    <div className="info">
-                        <img
-                            className="city-icon"
-                            src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`}
-                            alt={weather.weather[0].description}
-                        />
-                        <p>{weather.weather[0].description}</p>
-                    </div>
-                </div>
-            )}
-        </div>
+      <div className="App">
+        <header className="App-header">
+
+          {/* <img style={{
+              height: "20vh"
+            }} 
+            src="cyber-security.svg" 
+            alt="" /> */}
+          
+          <p>
+            Biometric auth Demo
+          </p>
+          
+          <input type="text" onChange={this.handleChange} name="userName" value={this.state.userName}></input>
+          
+          <button 
+            style={buttonStyle} 
+            id="reg"
+            onClick={()=>{
+              createCreds(this.state.userName);
+            }}
+
+          >
+            Register
+          </button>
+
+          <button 
+                      id="login"
+            style={hideButton}
+            className='hide' 
+            onClick={()=>{validateCreds(this.state.userName)}}
+          >
+            Login
+          </button>
+
+        </header>
+      </div>
     );
-};
+  }
+}
 
 export default App;
