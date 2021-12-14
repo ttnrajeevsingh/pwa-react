@@ -1,5 +1,5 @@
 // CACHE is the name for browser storage
-const CACHE_NAME = "version-1";
+const CACHE_NAME = "version-2";
 const urlsToCache = ["index.html", "offline.html"];
 
 // this represents the serviceworker itself
