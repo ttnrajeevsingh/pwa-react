@@ -1,5 +1,5 @@
 // CACHE is the name for browser storage
-const CACHE_NAME = "version-2";
+const CACHE_NAME = "version-3";
 const urlsToCache = ["index.html", "offline.html"];
 
 // this represents the serviceworker itself
@@ -51,3 +51,9 @@ self.addEventListener("activate", (event) => {
         )
     );
 });
+
+self.addEventListener('message', function (event) {
+    if (event.data.action === 'skipWaiting') {
+      self.skipWaiting();
+    }
+  });

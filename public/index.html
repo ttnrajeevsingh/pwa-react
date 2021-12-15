@@ -1,44 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <link rel="icon" type="image/png" href="./images/logo.png" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="theme-color" content="#000000" />
-        <meta
-            name="description"
-            content="Modern Progressive Web App - React Weather App"
-        />
-        <link rel="apple-touch-icon" href="./images/logo.png" />
 
-        <link rel="manifest" href="./manifest.json" />
+<head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/png" href="./images/logo.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="Modern Progressive Web App - React Weather App" />
+    <link rel="apple-touch-icon" href="./images/logo.png" />
 
-        <title>PWA React Weather App</title>
-        <script type="text/javascript" src="https://webauthn.io/dist/js/cbor.js"></script>
+    <link rel="manifest" href="./manifest.json" />
+
+    <title>PWA React Weather App</title>
+    <script type="text/javascript" src="https://webauthn.io/dist/js/cbor.js"></script>
     <script type="text/javascript" src="https://webauthn.io/dist/js/base64.js"></script>
-    </head>
-    <body>
-        <noscript>You need to enable JavaScript to run this app.</noscript>
-        <div id="root"></div>
-        <script>
-            if ("serviceWorker" in navigator) {
-                window.addEventListener("load", () => {
-                    navigator.serviceWorker
-                        .register("./serviceworker.js")
-                        .then((reg) =>
-                            console.log(
-                                "Service Worker Registration Success: ",
-                                reg.scope
-                            )
+</head>
+
+<body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <div id="snackbar">A new version of this app is available. Click <a id="reload">here</a> to update.</div>
+    <script>
+        let newWorker;
+        function showUpdateBar() {
+            let snackbar = document.getElementById('snackbar');
+            snackbar.className = 'show';
+        }
+        // The click event on the pop up notification
+        document.getElementById('reload').addEventListener('click', function () {
+            newWorker.postMessage({ action: 'skipWaiting' });
+        });
+        if ("serviceWorker" in navigator) {
+            window.addEventListener("load", () => {
+                navigator.serviceWorker
+                    .register("./serviceworker.js")
+                    .then((reg) => {
+                        console.log(
+                            "Service Worker Registration Success: ",
+                            reg.scope
                         )
-                        .catch((err) =>
-                            console.log(
-                                "Service Worker Registration Failure: ",
-                                err
-                            )
-                        );
-                });
-            }
-        </script>
-    </body>
+                        reg.addEventListener('updatefound', () => {
+                            // A wild service worker has appeared in reg.installing!
+                            newWorker = reg.installing;
+
+                            newWorker.addEventListener('statechange', () => {
+                                // Has network.state changed?
+                                switch (newWorker.state) {
+                                    case 'installed':
+                                        if (navigator.serviceWorker.controller) {
+                                            // new update available
+                                            showUpdateBar();
+                                        }
+                                        // No update available
+                                        break;
+                                }
+                            });
+                        });
+                    })
+                    .catch((err) =>
+                        console.log(
+                            "Service Worker Registration Failure: ",
+                            err
+                        )
+                    );
+            });
+            let refreshing;
+            navigator.serviceWorker.addEventListener('controllerchange', function () {
+                if (refreshing) return;
+                window.location.reload();
+                refreshing = true;
+            });
+        }
+    </script>
+</body>
+
 </html>
