@@ -1,9 +1,9 @@
-//import axios from "axios";
+import axios from "axios";
 import { regConfig } from "./registerConfig";
 import { loginConfig } from "./loginConfig";
-// const apiConstants={
-//   API_URL:'https://webauthn.io'
-//  }
+const apiConstants={
+  API_URL:'https://devapi.singularkey.com/v1/users/'
+ }
 function detectWebAuthnSupport() {
   if (window.PublicKeyCredential === undefined ||
       typeof window.PublicKeyCredential !== "function") {     
@@ -96,26 +96,41 @@ function makeCredential() {
   
   //var credential = null;
 
-  // var attestation_type = ''//$('#select-attestation').find(':selected').val();
-  // var authenticator_attachment = ''//$('#select-authenticator').find(':selected').val();
+  var attestation_type = ''//$('#select-attestation').find(':selected').val();
+  var authenticator_attachment = ''//$('#select-authenticator').find(':selected').val();
   
-  // var user_verification = ''//$('#select-verification').find(':selected').val();
-  // var resident_key_requirement = ''//$('#select-residency').find(':selected').val();
-  // var txAuthSimple_extension = ''//$('#extension-input').val();
-//   axios
-//   .get(`${apiConstants.API_URL}('/makeCredential/${state.user.name}`,{
-//     attType: attestation_type,
-//     authType: authenticator_attachment,
-//     userVerification: user_verification,
-//     residentKeyRequirement: resident_key_requirement,
-//     txAuthExtension: txAuthSimple_extension,
+  var user_verification = ''//$('#select-verification').find(':selected').val();
+  var resident_key_requirement = ''//$('#select-residency').find(':selected').val();
+  var txAuthSimple_extension = ''//$('#extension-input').val();
+//   var headers = {
+//     'Accept':'application/json',
+//     'x-sk-api-key':'API_KEY'
+  
+//   };
+//  // axios.post(`${apiConstants.API_URL}${state.user.name}/credentials/fido2/register/initiate`,{
+//     axios.post('https://webauthn.org/attestation/options',{
+//     // attType: attestation_type,
+//     // authType: authenticator_attachment,
+//     // userVerification: user_verification,
+//     // residentKeyRequirement: resident_key_requirement,
+//     // txAuthExtension: txAuthSimple_extension,
+//     displayName: "raj",
+// username: "raj"
 // },{
-//     headers: {
-//       "Content-Type": "application/json",      
-//     },
+//   mode: 'no-cors',
+//     headers: headers
 //   })
-//   .then((makeCredentialOptions) => {
-  let makeCredentialOptions = regConfig;
+fetch('http://dfca-106-211-53-7.ngrok.io/biometric/registration/start?userName=jjjj', {
+  method : "POST",
+  mode: 'no-cors',
+  headers:  {
+          // "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*"      
+        },
+  body:JSON.stringify({})
+})
+  .then((makeCredentialOptions) => {
+ // let makeCredentialOptions = regConfig;
     makeCredentialOptions.publicKey.challenge = bufferDecode(makeCredentialOptions.publicKey.challenge);
           makeCredentialOptions.publicKey.user.id = bufferDecode(makeCredentialOptions.publicKey.user.id);
           if (makeCredentialOptions.publicKey.excludeCredentials) {
@@ -137,7 +152,7 @@ function makeCredential() {
           }).catch(function (err) {
               console.info(err);
           });
- // })
+ })
 }
 
 // This should be used to verify the auth data with the server
