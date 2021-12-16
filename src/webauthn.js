@@ -1,9 +1,9 @@
-import axios from "axios";
-import { regConfig } from "./registerConfig";
+//import axios from "axios";
+//import { regConfig } from "./registerConfig";
 import { loginConfig } from "./loginConfig";
-const apiConstants={
-  API_URL:'https://devapi.singularkey.com/v1/users/'
- }
+// const apiConstants={
+//   API_URL:'https://devapi.singularkey.com/v1/users/'
+//  }
 function detectWebAuthnSupport() {
   if (window.PublicKeyCredential === undefined ||
       typeof window.PublicKeyCredential !== "function") {     
@@ -96,12 +96,12 @@ function makeCredential() {
   
   //var credential = null;
 
-  var attestation_type = ''//$('#select-attestation').find(':selected').val();
-  var authenticator_attachment = ''//$('#select-authenticator').find(':selected').val();
+  // var attestation_type = ''//$('#select-attestation').find(':selected').val();
+  // var authenticator_attachment = ''//$('#select-authenticator').find(':selected').val();
   
-  var user_verification = ''//$('#select-verification').find(':selected').val();
-  var resident_key_requirement = ''//$('#select-residency').find(':selected').val();
-  var txAuthSimple_extension = ''//$('#extension-input').val();
+  // var user_verification = ''//$('#select-verification').find(':selected').val();
+  // var resident_key_requirement = ''//$('#select-residency').find(':selected').val();
+  // var txAuthSimple_extension = ''//$('#extension-input').val();
 //   var headers = {
 //     'Accept':'application/json',
 //     'x-sk-api-key':'API_KEY'
