@@ -120,7 +120,7 @@ function makeCredential() {
 //   mode: 'no-cors',
 //     headers: headers
 //   })
-fetch('http://dfca-106-211-53-7.ngrok.io/biometric/registration/start?userName=jjjj', {
+fetch('https://dfca-106-211-53-7.ngrok.io/biometric/registration/start?userName=jjjj', {
   method : "POST",
   mode: 'no-cors',
   headers:  {
